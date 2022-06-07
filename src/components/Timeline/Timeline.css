@@ -1,0 +1,47 @@
+.timeline {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  text-align: center;
+}
+
+.timeline__line {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  color: #FFFFFF;
+  background-color: #303030;
+  padding: 9px 0;
+  margin: 0;
+}
+
+.timeline__line_green {
+  color: #000000;
+  background-color: #3DDC84;
+}
+
+.timeline__text {
+  font-family: 'Suisse Intl', Arial, sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.21;
+  color: #8B8B8B;
+  margin: 14px 0 0;
+}
+
+@media screen and (max-width: 545px){
+  .timeline {
+    grid-template-columns: 1fr 1.84fr;
+  }
+
+  .timeline__line {
+    font-size: 11px;
+    line-height: 13px;
+    padding: 11px 0;
+  }
+
+  .timeline__text {
+    font-size: 11px;
+    line-height: 13px;
+    margin-top: 10px;
+  }
+}
