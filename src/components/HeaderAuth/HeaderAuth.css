@@ -10,9 +10,14 @@
   font-size: 12px;
   line-height: 1.33;
   color: #FFFFFF;
+  transition: .3s;
 }
 
-.header-auth__link_green {
+.header-auth__link:hover {
+  opacity: .7;
+}
+
+.header-auth__link_color_green {
   background-color: #3DDC84;
   color: #000000;
   border-radius: 3px;

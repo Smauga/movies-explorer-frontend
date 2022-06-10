@@ -1,13 +1,18 @@
 import './Movies.css';
 import SearchForm from "../SearchForm/SearchForm";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
+import MoreMoviesButton from "../MoreMoviesButton/MoreMoviesButton";
+import Preloader from "../Preloader/Preloader";
+
 
 function Movies() {
   return (
-    <div className="movies">
+    <section className="movies">
       <SearchForm />
       <MoviesCardList />
-    </div>
+      <MoreMoviesButton />
+      {/* <Preloader /> */}
+    </section>
   );
 }
 

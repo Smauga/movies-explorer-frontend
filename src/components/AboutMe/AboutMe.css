@@ -79,6 +79,11 @@
   line-height: 17px;
   color: #FFFFFF;
   text-decoration: none;
+  transition: .3s;
+}
+
+.about-me__link:hover {
+  opacity: .7;
 }
 
 @media screen and (max-width: 797px){

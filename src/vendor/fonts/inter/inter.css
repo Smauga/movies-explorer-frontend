@@ -10,7 +10,7 @@
     font-style:  normal;
     font-weight: 500;
     font-display: swap;
-    src: url("./Inter-Regular.woff2");
+    src: url("./Inter-Medium.woff2");
 }
 
 @font-face {
@@ -18,12 +18,12 @@
     font-style:  normal;
     font-weight: 600;
     font-display: swap;
-    src: url("./Inter-Regular.woff2");
+    src: url("./Inter-Bold.woff2");
 }
 
 @font-face {
     font-family: 'Inter';
     font-style:  normal;
     font-weight: 700;
-    src: url("./Inter-Regular.woff2");
+    src: url("./Inter-Black.woff2");
 }

@@ -1,10 +1,16 @@
 import './MoviesCardList.css';
+import MoviesCard from "../MoviesCard/MoviesCard";
 
-function MoviesCardList() {
+function MoviesCardList({ saved }) {
   return (
-    <div className="movies-card-list">
-
-    </div>
+    <ul className="movies-card-list">
+      <MoviesCard saved={saved}/>
+      <MoviesCard saved={saved}/>
+      <MoviesCard saved={saved}/>
+      <MoviesCard saved={saved}/>
+      <MoviesCard saved={saved}/>
+      <MoviesCard saved={saved}/>
+    </ul>
   );
 }
 

@@ -1,0 +1,49 @@
+.sign-input {
+  width: 100%;
+}
+
+.sign-input__name {
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+  color: #8B8B8B;
+  margin: 0 0 10px;
+}
+
+.sign-input__input {
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #2F2F2F;
+  border-radius: 8px;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 16px;
+  color: #FFFFFF;
+  padding: 15px;
+  border: none;
+  outline: none;
+  transition: .3s;
+}
+
+.sign-input__input:hover,
+.sign-input__input:focus {
+  box-shadow: 0 0 15px rgba(0,0,0,0.5);
+}
+
+.sign-input__input_type_error {
+  color: #EE3465;
+}
+
+.sign-input__error {
+  display: block;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+  color: #EE3465;
+  height: 20px;
+  opacity: 0;
+}
+
+.sign-input__error_visible {
+  opacity: 1;
+}

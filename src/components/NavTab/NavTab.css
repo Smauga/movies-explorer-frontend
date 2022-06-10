@@ -19,6 +19,11 @@
   background-color: #303030;
   border-radius: 10px;
   text-align: center;
+  transition: .3s;
+}
+
+.nav-tab__link:hover {
+  opacity: .7;
 }
 
 @media screen and (max-width: 576px){

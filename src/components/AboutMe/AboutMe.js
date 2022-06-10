@@ -3,7 +3,7 @@ import myPhoto from '../../images/my-photo.jpg';
 
 function AboutMe() {
   return (
-    <section className='about-me'>
+    <section className='about-me' id='about-me'>
       <h2 className='about-me__title'>Студент</h2>
       <div className='about-me__container'>
         <div className='about-me__info'>
@@ -13,8 +13,8 @@ function AboutMe() {
             С 2015 года работал в компании «СКБ Контур». После того, как прошёл курс по веб-разработке, начал заниматься фриланс-заказами и ушёл с постоянной работы.
           </p>
           <div className='about-me__contacts'>
-            <a className='about-me__link' href='#'>Вконтакте</a>
-            <a className='about-me__link' href='#'>Github</a>
+            <a className='about-me__link' href='https://t.me/nsmagins' target='_blank'>Telegram</a>
+            <a className='about-me__link' href='https://github.com/Smauga' target='_blank'>Github</a>
           </div>
         </div>
         <div className='about-me__image-container'>
