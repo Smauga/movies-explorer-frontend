@@ -62,7 +62,7 @@
 @media screen and (max-width: 797px){
   .header-nav__container {
     background-color: #202020;
-    width: 67%;
+    width: 66%;
     height: 100vh;
     flex-direction: column;
     justify-content: space-between;
@@ -93,10 +93,10 @@
  }
 
   .header-nav__links {
-    margin-top: 160px;
+    margin: 160px 50px 0 0;
     flex-direction: column;
     align-items: center;
-    row-gap: 22px;
+    row-gap: 26px;
     padding-bottom: 4px;
   }
   
@@ -115,7 +115,7 @@
   }
   
   .header-nav__account-button {
-    margin-bottom: 90px;
+    margin: 0 50px 90px 0;
     max-width: 100px;
   }
   
@@ -175,9 +175,18 @@
     width: 100%;
   }
 
+  .header-nav__menu {
+    right: 90px;
+  }
+
   .header-nav__links {
-    row-gap: 15px;
+    row-gap: 25px;
     padding-bottom: 7px;
+    margin: 145px 0 0;
+  }
+
+  .header-nav__account-button {
+    margin: 0 0 40px;
   }
 
   .header-nav__menu-first-line,

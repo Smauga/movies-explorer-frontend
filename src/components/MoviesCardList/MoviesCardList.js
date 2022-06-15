@@ -1,15 +1,9 @@
 import './MoviesCardList.css';
-import MoviesCard from "../MoviesCard/MoviesCard";
 
-function MoviesCardList({ saved }) {
+function MoviesCardList({ children }) {
   return (
     <ul className="movies-card-list">
-      <MoviesCard saved={saved}/>
-      <MoviesCard saved={saved}/>
-      <MoviesCard saved={saved}/>
-      <MoviesCard saved={saved}/>
-      <MoviesCard saved={saved}/>
-      <MoviesCard saved={saved}/>
+      {children}
     </ul>
   );
 }

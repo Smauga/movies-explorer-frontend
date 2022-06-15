@@ -17,3 +17,9 @@
 .more-movies-button:hover {
   opacity: .7;
 }
+
+@media screen and (max-width: 545px){
+  .more-movies-button {
+    margin-top: 30px;
+  }
+}

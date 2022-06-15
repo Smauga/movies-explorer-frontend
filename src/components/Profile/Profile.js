@@ -1,8 +1,10 @@
 import './Profile.css';
 
+const edit = false;
+
 function Profile() {
   return (
-    <form className="profile">
+    <form className='profile'>
       <div className='profile__container'>
         <h2 className='profile__welcome'>Привет, Виталий!</h2>
         <div className='profile__input-container'>
@@ -14,9 +16,17 @@ function Profile() {
           <input className='profile__input profile__input_type_email' type='text' id='email' value='pochta@yandex.ru' />
         </div>
       </div>
-      <div className='profile__buttons'>
-        <button className='profile__button' type='submit'>Редактировать</button>
-        <button className='profile__button profile__button_color_red' type='button'>Выйти из аккаунта</button>
+        <div className='profile__buttons'>
+        { edit ?
+          <>
+            <p className='profile__error-message'>При обновлении профиля произошла ошибка.</p>
+            <button className='profile__button-edit profile__button-edit_disabled' disabled type='submit'>Сохранить</button> 
+          </> :
+          <>
+            <button className='profile__button' type='button'>Редактировать</button>
+            <button className='profile__button profile__button_color_red' type='button'>Выйти из аккаунта</button>
+          </>
+        }
       </div>
     </form>
   );
