@@ -18,8 +18,11 @@
   align-items: center;
   box-sizing: border-box;
   transition: .3s;
+  
 }
 
+
+.search-form__input:focus,
 .search-form__container:hover {
   box-shadow: 0 0 15px rgba(0,0,0,0.2);
 }

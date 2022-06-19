@@ -21,7 +21,7 @@ function AboutMe() {
           </div>
         </div>
         <div className='about-me__image-container'>
-          <img className='about-me__image' src={myPhoto} alt='Мое фото' />
+          <img className='about-me__image' src={myPhoto} alt='my photo' />
         </div>
       </div>
     </section>
