@@ -1,1 +1,2 @@
-# movies-explorer-frontend
+Ссылка на макет - https://disk.yandex.ru/d/cReeuXuh3e1ioA
+Ссылка на сервер - кончился период. Не активен на данный момент.

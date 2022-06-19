@@ -1,0 +1,26 @@
+.register {
+  width: 396px;
+  height: calc(100vh - 140px);
+  margin: 70px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+@media screen and (max-width: 797px){
+  .register {
+    justify-content: space-around;
+    margin: 0;
+    margin: 200px 0 200px;
+    height: calc(100vh - 400px);
+  }
+}
+
+@media screen and (max-width: 545px){
+  .register {
+    justify-content: space-between;
+    height: calc(100vh - 86px);
+    width: 81.25%;
+    margin: 56px 0 30px;
+  }
+}

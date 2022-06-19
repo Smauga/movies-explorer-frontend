@@ -1,0 +1,128 @@
+.techs {
+  background-color: #272727;
+  width: 100%;
+}
+
+.techs__title {
+  width: 89%;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 27px;
+  letter-spacing: -0.04em;
+  color: #FFFFFF;
+  padding-bottom: 23px;
+  border-bottom: solid 1px #DADADA;
+  margin: 0 auto 90px;
+  padding-top: 100px;
+}
+
+.techs__subtitle {
+  width: 89%;
+  font-weight: 400;
+  font-size: 50px;
+  line-height: 1.16;
+  letter-spacing: -0.04em;
+  color: #FFFFFF;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.techs__text {
+  margin: 26px auto 100px;
+  width: 36%;
+  font-size: 14px;
+  line-height: 1.43;
+  text-align: center;
+  letter-spacing: -0.04em;
+  color: #FFFFFF;
+}
+
+.techs__list {
+  width: 89%;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-bottom: 100px;
+  justify-content:center;
+}
+
+.techs__item {
+  background-color: #303030;
+  border-radius: 10px;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: center;
+  letter-spacing: -0.04em;
+  color: #FFFFFF;
+  padding: 21px 0;
+  margin: 0;
+  width: 90px;
+  transition: .3s;
+}
+
+.techs__item:hover {
+  opacity: .7;
+}
+
+@media screen and (max-width: 797px){
+  .techs__title {
+    width: 87%;
+    margin-bottom: 80px;
+    padding-top: 90px;
+  }
+
+  .techs__text {
+    font-size: 12px;
+    line-height: 18px;
+    width: 60%;
+    margin: 22px auto 83px
+  }
+
+  .techs__list {
+    padding-bottom: 90px;
+    width: 87%;
+  }
+
+  .techs__item {
+    font-size: 12px;
+    line-height: 15px;
+    width: 84px;
+  }
+}
+
+@media screen and (max-width: 545px){
+  .techs {
+    background-color: #202020;
+    width: 91.25%;
+  }
+
+  .techs__title {
+    width: 100%;
+    font-size: 18px;
+    line-height: 22px;
+    padding-bottom: 28px;
+    border-bottom: solid 1px #000000;
+    margin: 70px auto 60px;
+    padding-top: 0;
+  }
+  
+  .techs__subtitle {
+    width: 100%;
+    font-size: 30px;
+    line-height: 36px;
+  }
+  
+  .techs__text {
+    margin: 24px auto 50px;
+    width: 100%;
+    font-size: 11px;
+    line-height: 1.45;
+  }
+  
+  .techs__list {
+    width: 90%;
+    padding-bottom: 0;
+    margin-bottom: 70px;
+  }
+}

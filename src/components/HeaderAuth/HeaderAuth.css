@@ -1,0 +1,41 @@
+.header-auth {
+  display: flex;
+  column-gap: 30px;
+  align-items: center;
+}
+
+.header-auth__link {
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 1.33;
+  color: #FFFFFF;
+  transition: .3s;
+}
+
+.header-auth__link:hover {
+  opacity: .7;
+}
+
+.header-auth__link_color_green {
+  background-color: #3DDC84;
+  color: #000000;
+  border-radius: 3px;
+  padding: 5px 12px;
+}
+
+@media screen and (max-width: 545px){
+  .header-auth {
+    column-gap: 14px;
+  }
+  
+  .header-auth__link {
+    font-size: 10px;
+    line-height: 1.6;
+  }
+  
+  .header-auth__link_green {
+    border-radius: 3px;
+    padding: 5px 12px;
+  }
+}
