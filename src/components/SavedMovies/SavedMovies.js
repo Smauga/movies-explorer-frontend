@@ -3,16 +3,23 @@ import SearchForm from "../SearchForm/SearchForm";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import MoviesCard from "../MoviesCard/MoviesCard";
 
-const saved = true;
+function SavedMovies({ savedMovies, handleDelete, searchMovies }) {
 
-function SavedMovies() {
   return (
     <section className="saved-movies">
-      <SearchForm />
-      <MoviesCardList saved={true}>
-        <MoviesCard saved={saved}/>
-        <MoviesCard saved={saved}/>
-      </MoviesCardList>
+      <SearchForm onSearchClick={searchMovies} savedSection={true}/>
+        {savedMovies.length === 0 ?
+        <p className='saved-movies__not-found'>Ничего не найдено</p> :
+        <MoviesCardList saved={true}>
+          {savedMovies.map((savedMovie) =>
+            <MoviesCard movie={savedMovie}
+              key={savedMovie.movieId}
+              handleDelete={handleDelete}
+              savedSection={true}
+              movieIsSaved={true}/> 
+            )
+          }
+        </MoviesCardList>}
     </section>
   );
 }

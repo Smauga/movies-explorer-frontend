@@ -9,6 +9,11 @@
 
 .profile__container {
   width: 100%;
+  pointer-events: none;
+}
+
+.profile__container_enabled {
+  pointer-events: all;
 }
 
 .profile__welcome {
@@ -24,7 +29,12 @@
   display: flex;
   width: 100%;
   border-bottom: solid 1px #424242;
-  pointer-events: none;
+  transition: .3s;
+}
+
+.profile__input-container:hover
+ {
+  opacity: .7;
 }
 
 .profile__input-container:last-child {
@@ -52,6 +62,12 @@
   text-align: right;
   color: #FFFFFF;
   outline: none;
+}
+
+
+.profile__input:focus
+ {
+  opacity: .7;
 }
 
 .profile__buttons {
@@ -94,6 +110,7 @@
   text-align: center;
   color: #FFFFFF;
   transition: .3s;
+  cursor: pointer;
 }
 
 .profile__button-edit:hover {
@@ -103,10 +120,7 @@
 .profile__button-edit_disabled {
   background-color: #F8F8F8;
   color: #C2C2C2;
-}
-
-.profile__button-edit_disabled:hover {
-  opacity: 1;
+  pointer-events: none;
 }
 
 .profile__error-message {

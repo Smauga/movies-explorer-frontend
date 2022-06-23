@@ -1,5 +1,17 @@
 .saved-movies {
   width: 89%;
+  min-height: calc(100vh - 175px);
+}
+
+.saved-movies__not-found {
+  width: 100%;
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 45px;
+  color: #FFFFFF;
+  text-align: center;
+  margin: 15% 0 0;
+  justify-self: center;
 }
 
 @media screen and (max-width: 797px){
@@ -12,5 +24,11 @@
   .saved-movies {
     width: 93.75%;
     margin-bottom: 125px;
+    min-height: calc(100vh - 420px);
+  }
+
+  .saved-movies__not-found {
+    font-size: 18px;
+    line-height: 22px;
   }
 }

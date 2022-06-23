@@ -4,16 +4,11 @@ import './Header.css';
 import HeaderAuth from "../HeaderAuth/HeaderAuth";
 import HeaderNav from "../HeaderNav/HeaderNav";
 
-function Header() {
+function Header({ loggedIn }) {
   return (
     <header className='header'>
       <Link to='' className='header__logo'></Link>
-      <Switch>
-        <Route exact path='/'>
-          <HeaderAuth />
-        </Route>
-        <HeaderNav />
-      </Switch>
+      { loggedIn ? <HeaderNav /> : <HeaderAuth /> }
     </header>
   );
 }
