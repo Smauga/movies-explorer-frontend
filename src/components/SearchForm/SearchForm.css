@@ -21,7 +21,6 @@
   
 }
 
-
 .search-form__input:focus,
 .search-form__container:hover {
   box-shadow: 0 0 15px rgba(0,0,0,0.2);
@@ -48,7 +47,7 @@
 }
 
 .search-form__search-button {
-  background-color: #2BE080;
+  background-color: #8B8B8B;
   border-radius: 48px;
   height: 34px;
   width: 80px;
@@ -59,12 +58,17 @@
   background-image: url('../../images/search-icon.svg');
   background-repeat: no-repeat;
   background-position: center;
-  cursor: pointer;
+  box-sizing: border-box;
   transition: .3s;
 }
 
-.search-form__search-button:hover {
-  opacity: .7;
+.search-form__search-button_enabled {
+  background-color: #2BE080;
+  cursor: pointer;
+}
+
+.search-form__search-button_enabled:hover {
+  padding: 0 50px;
 }
 
 .search-form__shorts {

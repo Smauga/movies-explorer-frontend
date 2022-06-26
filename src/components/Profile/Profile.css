@@ -26,6 +26,7 @@
 }
 
 .profile__input-container {
+  box-sizing: border-box;
   display: flex;
   width: 100%;
   border-bottom: solid 1px #424242;
@@ -34,7 +35,7 @@
 
 .profile__input-container:hover
  {
-  opacity: .7;
+  padding: 0 0 0 5px;
 }
 
 .profile__input-container:last-child {
@@ -62,12 +63,16 @@
   text-align: right;
   color: #FFFFFF;
   outline: none;
+  transition: .3s;
+  border-radius: 5px;
+  box-sizing: border-box;
 }
 
 
 .profile__input:focus
  {
-  opacity: .7;
+  padding: 0 5px 0 0 ;
+ 
 }
 
 .profile__buttons {

@@ -2,6 +2,13 @@
   width: 100%;
 }
 
+.sign-bottom__error-message {
+  font-size: 11px;
+  line-height: 13px;
+  text-align: center;
+  color: #FF004C;
+}
+
 .sign-bottom__button {
   width: 100%;
   font-weight: 500;
@@ -13,6 +20,12 @@
   padding: 14px 0;
   border: none;
   transition: .3s;
+}
+
+.sign-bottom__button_disabled {
+  pointer-events: none;
+  background-color: #F8F8F8;
+  color: #C2C2C2;
 }
 
 .sign-bottom__button:hover {

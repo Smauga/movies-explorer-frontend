@@ -2,36 +2,38 @@ import './Login.css';
 import SignInput from "../SignInput/SignInput";
 import SignTitle from "../SignTitle/SignTitle";
 import SignBottom from "../SignBottom/SignBottom";
-
+import { useFormWithValidation } from '../../utils/formValidator';
 import { useState } from 'react';
 
 function Login({ onClickLogin }) {
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const useForm = useFormWithValidation();
 
   function handleChange(e) {
-    if (e.target.name === 'email') {
-      setEmail(e.target.value);
-    }
-    if (e.target.name === 'password') {
-      setPassword(e.target.value);
-    }
-  }
+    useForm.handleChange(e);
+}
   
-  function handleSubmit(e) {
-    e.preventDefault();
-    onClickLogin(email, password);
-  }
+function handleSubmit(e) {
+  e.preventDefault();
+  onClickLogin(useForm.values.email, useForm.values.password)
+    .catch((error) => {
+      error.status ===  400 ? 
+      setErrorMessage('Вы ввели неправильный логин или пароль.') : 
+      setErrorMessage('При авторизации произошла ошибка.');
+    });
+  e.target.reset();
+  useForm.resetForm();
+}
 
   return (
     <form className='login' onSubmit={handleSubmit}>
       <div className='login__container'>
         <SignTitle text='Рады видеть!' />
-        <SignInput name='E-mail' type='email' onChange={handleChange} />
-        <SignInput name='Пароль' type='password' onChange={handleChange} />
+        <SignInput name='E-mail' type='email' onChange={handleChange} isValid={useForm.errors.email}/>
+        <SignInput name='Пароль' type='password' onChange={handleChange} isValid={useForm.errors.password}/>
       </div>
-      <SignBottom buttonText='Войти'  linkDescription='Ещё не зарегистрированы?' linkText='Регистрация' linkTo='signup'/>
+      <SignBottom errorMessage={errorMessage} buttonText='Войти' isValid={useForm.isValid} linkDescription='Ещё не зарегистрированы?' linkText='Регистрация' linkTo='signup'/>
     </form>
   );
 }

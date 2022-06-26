@@ -1,14 +1,14 @@
 import './MoviesCard.css';
 import { useState, useRef, useEffect } from 'react';
 
-function MoviesCard({ movie, saveMovie, movieIsSaved, savedSection, handleDelete }) {
+function MoviesCard({ loggedIn, movie, saveMovie, movieIsSaved, savedSection, handleDelete }) {
 
   const movieImage = movie.image.url ? `https://api.nomoreparties.co${movie.image.url}` : movie.image;
   const [saved, setSaved] = useState(movieIsSaved);
 
   useEffect(() => {
     setSaved(movieIsSaved);
-   }, [movieIsSaved]);
+   }, [loggedIn]);
 
   function calculateDuration() {
     const hours = Math.trunc(movie.duration / 60);
@@ -19,9 +19,27 @@ function MoviesCard({ movie, saveMovie, movieIsSaved, savedSection, handleDelete
   }
 
   function handleClickButton() {
-    if(saved) handleDelete(movie);
-    else saveMovie(movie);
-    setSaved(!saved);
+    if(saved) {
+      handleDelete(movie)
+      .then(() => {
+        setSaved(!saved);
+      })
+      .catch(() => {
+        console.log('Error');
+      })
+    }
+    else {
+
+      saveMovie(movie)
+      .then(() => {
+        setSaved(!saved);
+      })
+      .catch(() => {
+        console.log('Error');
+      })
+    }
+    
+    
   }
 
   return (

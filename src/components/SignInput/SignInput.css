@@ -40,10 +40,6 @@
   font-size: 10px;
   line-height: 12px;
   color: #EE3465;
-  height: 20px;
-  opacity: 0;
-}
-
-.sign-input__error_visible {
+  height: 24px;
   opacity: 1;
 }

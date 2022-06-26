@@ -30,6 +30,8 @@
   color: #2BE080;
   text-decoration: none;
   transition: .3s;
+  background-color: transparent;
+  border: none;
 }
 
 .not-found-page__back:hover {

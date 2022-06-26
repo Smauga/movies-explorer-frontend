@@ -38,7 +38,7 @@ function SearchForm({ onSearchClick, savedShortFilms, savedSearch, savedSection 
         onChange={handleChange}
         ref={searchRef}
         required />
-       <button className='search-form__search-button' type='submit'></button>
+       <button className={!search ? 'search-form__search-button' : 'search-form__search-button search-form__search-button_enabled'} type='submit' disabled={!search}></button>
      </div>
      <div className='search-form__shorts'>
        <p className='search-form__shorts-text'>Короткометражки</p>

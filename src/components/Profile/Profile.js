@@ -7,8 +7,12 @@ function Profile({ onClickSignout, onClickEditProfile }) {
   
   const user = useContext(CurrentUser);
   const [editProfile, setEditProfile] = useState(false);
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [isValid, setIsValid] = useState(false);
+  const [message, setMessage] = useState('');
+
 
   useEffect(() => {
     if (user) {
@@ -28,12 +32,22 @@ function Profile({ onClickSignout, onClickEditProfile }) {
     if (e.target.name === 'email') {
       setEmail(e.target.value);
     }
+    setIsValid(e.target.closest("form").checkValidity());
   }
   
   function handleSubmit(e) {
     e.preventDefault();
-    onClickEditProfile(name, email);
-    setEditProfile(false);
+    onClickEditProfile(name, email)
+    .then(() => {
+      setEditProfile(false)
+      setMessage('');
+    })
+      .catch((error) => {
+        error.status ===  409 ? 
+        setMessage('Пользователь с таким email уже существует.') : 
+        setMessage('При обновлении профиля произошла ошибка.');
+      });
+
   }
 
   return (
@@ -48,13 +62,15 @@ function Profile({ onClickSignout, onClickEditProfile }) {
             name='name'
             value={name || ''}
             onChange={handleChange}
+            minLength='2'
+            maxLength='30'
             required/>
         </div>
         <div className='profile__input-container'>
           <label className='profile__input-label' htmlFor='email'>E-mail</label>
           <input
           className='profile__input profile__input_type_email'
-          type='text'
+          type='email'
           name='email'
           value={email || ''}
           onChange={handleChange}
@@ -65,8 +81,8 @@ function Profile({ onClickSignout, onClickEditProfile }) {
         { 
         editProfile ?
           <>
-            <p className='profile__error-message'>При обновлении профиля произошла ошибка.</p>
-            <button className='profile__button-edit' type='submit'>Сохранить</button> 
+            <p className='profile__error-message'>{message}</p>
+            <button className={!isValid || (name === user.name && email === user.email) ? 'profile__button-edit profile__button-edit_disabled': 'profile__button-edit'} type='submit'>Сохранить</button> 
           </> :
           <>
             <button className='profile__button' type='button' onClick={handleEditClick} >Редактировать</button>

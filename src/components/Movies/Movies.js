@@ -7,7 +7,7 @@ import Preloader from "../Preloader/Preloader";
 
 import { useState, useEffect } from 'react';
 
-function Movies({ movies, handleDelete, savedMovies, searchMovies, preloader, saveMovie }) {
+function Movies({ movies, loggedIn, handleDelete, savedMovies, searchMovies, preloader, saveMovie }) {
 
   const savedShortFilms = sessionStorage.getItem('shortFilms');
   const savedSearch = sessionStorage.getItem('search');
@@ -17,9 +17,6 @@ function Movies({ movies, handleDelete, savedMovies, searchMovies, preloader, sa
 
   useEffect(() => {
     calculateWidth(); 
-  }, []);
-
-  useEffect(() => {
     window.addEventListener("resize", resizeThrottler, false);
     let resizeTimeout;
     function resizeThrottler() {
@@ -50,6 +47,7 @@ function Movies({ movies, handleDelete, savedMovies, searchMovies, preloader, sa
         {movies.slice(0, loadedMoves.initial + loadedMoreMoves * loadedMoves.step).map((movie) => {
           const isSaved = savedMoviesId.includes(movie.id);
           return <MoviesCard
+          loggedIn={loggedIn}
             movie={movie}
             key={movie.id}
             handleDelete={handleDelete}

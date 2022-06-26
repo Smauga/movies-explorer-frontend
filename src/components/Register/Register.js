@@ -3,53 +3,42 @@ import SignInput from "../SignInput/SignInput";
 import SignTitle from "../SignTitle/SignTitle";
 import SignBottom from "../SignBottom/SignBottom";
 import { useFormWithValidation } from '../../utils/formValidator';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 function Register({ onClickRegister }) {
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
-  
- const validation = useFormWithValidation();
-// console.log(validation.handleChange);
-  // useEffect(() => { 
-    
-  // }, []);
+  const [errorMessage, setErrorMessage] = useState('');
+  const useForm = useFormWithValidation();
 
   function handleChange(e) {
-    if (e.target.name === 'email') {
-      setEmail(e.target.value);
-      validation.handleChange(e);
-      console.log(validation.values);
-      console.log(validation.errors);
-      console.log(validation.isValid);
-    }
-    if (e.target.name === 'password') {
-      setPassword(e.target.value);
-      validation.handleChange(e);
-    }
-    if (e.target.name === 'name') {
-      setName(e.target.value);
-      validation.handleChange(e);
-    }
+    useForm.handleChange(e);
   }
   
   function handleSubmit(e) {
     e.preventDefault();
-    onClickRegister(email, password, name);
+    setErrorMessage('');
+    onClickRegister(useForm.values.email, useForm.values.password, useForm.values.name)
+      .catch((error) => {
+        error.status ===  409? 
+        setErrorMessage('Пользователь с таким email уже существует.') : 
+        setErrorMessage('При регистрации пользователя произошла ошибка.');
+      });
+    e.target.reset();
+    useForm.resetForm();
   }
 
   return (
     <form className='register' onSubmit={handleSubmit}>
       <div className='register__container'>
         <SignTitle text='Добро пожаловать!' />
-        <SignInput name='Имя' type='name' onChange={handleChange}/>
-        <SignInput name='E-mail' type='email' onChange={handleChange}/>
-        <SignInput name='Пароль' type='password' onChange={handleChange}/>
+        <SignInput name='Имя' type='name' onChange={handleChange} isValid={useForm.errors.name} minLength={2} maxLength={30} pattern={'[A-Za-zА-ЯЁа-яё1-9 -]+$'}/>
+        <SignInput name='E-mail' type='email' isValid={useForm.errors.email} onChange={handleChange}/>
+        <SignInput name='Пароль' type='password' isValid={useForm.errors.password} onChange={handleChange}/>
       </div>
       <SignBottom
+        errorMessage={errorMessage}
         buttonText='Зарегистрироваться'
+        isValid={useForm.isValid}
         linkDescription='Уже зарегистрированы?'
         linkText='Войти'
         linkTo='signin'
