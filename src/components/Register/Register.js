@@ -21,7 +21,7 @@ function Register({ onClickRegister }) {
     setErrorMessage('');
     onClickRegister(useForm.values.email, useForm.values.password, useForm.values.name)
       .catch((error) => 
-        error.status ===  409? 
+        error ===  409? 
         setErrorMessage('Пользователь с таким email уже существует.') : 
         setErrorMessage('При регистрации пользователя произошла ошибка.')
       );
