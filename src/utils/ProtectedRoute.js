@@ -4,9 +4,7 @@ import { useLocation } from 'react-router-dom'
 
 const ProtectedRoute = ({ children, loggedIn }) => {
   const location = useLocation();
-
-console.log(loggedIn);
-
+  
   if(location.pathname === '/signup' || location.pathname === '/signin') {
     if(loggedIn) return <Redirect to="/movies" /> 
     else return children;

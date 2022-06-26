@@ -1,14 +1,10 @@
 import './MoviesCard.css';
 import { useState, useRef, useEffect } from 'react';
 
-function MoviesCard({ loggedIn, movie, saveMovie, movieIsSaved, savedSection, handleDelete }) {
+function MoviesCard({ movie, saveMovie, movieIsSaved, savedSection, handleDelete }) {
 
   const movieImage = movie.image.url ? `https://api.nomoreparties.co${movie.image.url}` : movie.image;
   const [saved, setSaved] = useState(movieIsSaved);
-
-  useEffect(() => {
-    setSaved(movieIsSaved);
-   }, [loggedIn]);
 
   function calculateDuration() {
     const hours = Math.trunc(movie.duration / 60);

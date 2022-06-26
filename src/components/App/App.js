@@ -14,8 +14,10 @@ import Register from "../Register/Register";
 import NotFoundPage from "../NotFoundPage/NotFoundPage";
 import MainApi from "../../utils/MainApi";
 import MoviesApi from "../../utils/MoviesApi";
+import Preloader from "../Preloader/Preloader";
 import { CurrentUser } from '../../contexts/CurrentUserContext';
 import { filterMovies } from '../../utils/filterMovies';
+
 
 
 function App() {
@@ -30,11 +32,14 @@ function App() {
   const [preloader, setPreloader] = useState(false);
 
   useEffect(() => {
-
+    setPreloader(true);
     MainApi.getMe()
     .then(() => setLoggedIn(true))
-    .catch(error => console.log('Вы не авторизованы'))
-    .finally(() => setIsLoading(true));
+    .catch(error => {
+      console.log('Вы не авторизованы');
+      setIsLoading(true);
+    })
+    .finally(() => setPreloader(false));
   }, []);
 
   useEffect(() => {
@@ -45,12 +50,13 @@ function App() {
         MainApi.getMovies()
         .then(savedMovies => {
           setSavedMovies(savedMovies.reverse());
+          setIsLoading(true)
         })
         .catch(error => console.log(error));
         setMovies(sessionStorage.getItem('searchResult') ? JSON.parse(sessionStorage.getItem('searchResult')) : []);
       })
       .catch(error => console.log(error));
-  }, [loggedIn, localStorage.getItem('LoggedIn')]);
+  }, [loggedIn]);
 
   async function handleRegister(email, password, name) {
     let registerError;
@@ -95,20 +101,21 @@ function App() {
       if(editError) return Promise.reject(editError);
   }
 
-  function searchMovies(search, shortFilms, savedSection) {
+  async function searchMovies(search, shortFilms, savedSection) {
+    let searchError;
     if(savedSection) {
       setSavedMovies([]);
-      MainApi.getMovies()
+      await MainApi.getMovies()
       .then(savedMovies => {
         const searchResult = filterMovies(savedMovies, search, shortFilms);
         setSavedMovies(searchResult.reverse());
       })
-      .catch(error => console.log(error));
+      .catch(error => searchError = error);
     }
     else {
     setMovies([]);
     setPreloader(true);
-    MoviesApi.getMovies()
+    await MoviesApi.getMovies()
       .then(movies => {
         const searchResult = filterMovies(movies, search, shortFilms);
         setMovies(searchResult);
@@ -116,11 +123,15 @@ function App() {
         sessionStorage.setItem('search', search);
         sessionStorage.setItem('searchResult', JSON.stringify(searchResult));
       })
-      .catch(error => console.log(error))
+      .catch(error => {
+        searchError = error;
+      })
       .finally(() => {
         setPreloader(false);
       });
     }
+    if(!searchError) return Promise.resolve();
+    else return Promise.reject()
   }
 
   async function saveMovie(movie) {
@@ -161,9 +172,11 @@ function handleGoBack() {
 }
 
   return (
-    <div className="app">
-       {isLoading  ?
+    <div className={!isLoading ? 'app app_loading' : 'app'}>
+      {(preloader && !loggedIn) && <Preloader />}
+       {isLoading &&
       <div className="app__container">
+
       <CurrentUser.Provider value={currentUser}>
           <Switch>
             <Route exact path='/'>
@@ -186,7 +199,7 @@ function handleGoBack() {
 
               <Header loggedIn={loggedIn} />
               <ProtectedRoute loggedIn={loggedIn}>
-              <Movies loggedIn={loggedIn} movies={movies} handleDelete={deleteMovie} savedMovies={savedMovies} setMovies={setMovies} searchMovies={searchMovies} preloader={preloader} saveMovie={saveMovie}/>
+              <Movies movies={movies} handleDelete={deleteMovie} savedMovies={savedMovies} setMovies={setMovies} searchMovies={searchMovies} preloader={preloader} saveMovie={saveMovie}/>
                 </ProtectedRoute> 
               <Footer />
             
@@ -210,8 +223,9 @@ function handleGoBack() {
             </Route>
           </Switch>
         </CurrentUser.Provider>
+
       </div>
-    : <></>}
+            }
     </div>
   );
 }
