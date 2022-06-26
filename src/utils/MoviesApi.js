@@ -7,9 +7,10 @@ class MoviesApi {
 
   _handleResponse(res) {
     if (res.ok) return res.json();
-    return Promise.reject(`Ошибка ${res.status}`);
+    return Promise.reject(res.status);
   }
 
+  // Получения фильмов
   getMovies() {
     return fetch(`${this._address}/beatfilm-movies`)
       .then(res => this._handleResponse(res));

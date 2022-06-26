@@ -128,10 +128,16 @@
   pointer-events: none;
 }
 
-.profile__error-message {
-  font-size: 11px;
-  line-height: 13px;
+.profile__message {
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 16px;
   text-align: center;
+  color: #3DDC84;
+  margin: 0;
+}
+
+.profile__message_type_error {
   color: #FF004C;
 }
 

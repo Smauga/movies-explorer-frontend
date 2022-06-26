@@ -7,9 +7,10 @@ class MainApi {
 
   _handleResponse(res) {
     if (res.ok) return res.json();
-    return Promise.reject(res);
+    return Promise.reject(res.status);
   }
 
+  // Регистрация пользователя
   register (email, password, name) {
     return fetch(`${this._address}/signup`, {
       method: 'POST',
@@ -22,6 +23,7 @@ class MainApi {
       .then(res => this._handleResponse(res));
   };
 
+  // Авторизация пользователя
   authorize (email, password) {
     return fetch(`${this._address}/signin`, {
       method: 'POST',
@@ -34,6 +36,7 @@ class MainApi {
       .then(res => this._handleResponse(res));
   };
 
+  // Выход из аккаунта пользователя
   signOut () {
     return fetch(`${this._address}/signout`, {
       method: 'POST',
@@ -42,6 +45,7 @@ class MainApi {
       .then(res => this._handleResponse(res));
   };
 
+  // Получение данных пользователя
   getMe() {
     return fetch(`${this._address}/users/me`, {
       credentials: 'include',
@@ -49,6 +53,7 @@ class MainApi {
       .then(res => this._handleResponse(res));
   }
 
+  // Изменение данных пользователя
   updateMe({ email, name }) {
     return fetch(`${this._address}/users/me`, {
       method: 'PATCH',
@@ -64,6 +69,7 @@ class MainApi {
       .then(res => this._handleResponse(res));
   }
 
+  // Получение сохраненных фильмов
   getMovies() {
     return fetch(`${this._address}/movies`, {
       credentials: 'include'
@@ -71,6 +77,7 @@ class MainApi {
       .then(res => this._handleResponse(res));
   }
 
+  // Сохранение фильма
   addMovie( { country,
     director,
     duration,
@@ -105,6 +112,7 @@ class MainApi {
       .then(res => this._handleResponse(res));
   }
 
+  // Удалить фильм
   deleteMovie(_id) {
     return fetch(`${this._address}/movies/${_id}`, {
       method: 'DELETE',

@@ -1,11 +1,13 @@
 import './MoviesCard.css';
-import { useState, useRef, useEffect } from 'react';
 
-function MoviesCard({ movie, saveMovie, movieIsSaved, savedSection, handleDelete }) {
+import { useState } from 'react';
+
+function MoviesCard({ movie, onSaveMovieClick, movieIsSaved, isPageSavedMovies, onDeleteMovieClick }) {
 
   const movieImage = movie.image.url ? `https://api.nomoreparties.co${movie.image.url}` : movie.image;
-  const [saved, setSaved] = useState(movieIsSaved);
+  const [savedMovie, setSavedMovie] = useState(movieIsSaved);
 
+  // Перевод длительности фильма в формат часы/минуты
   function calculateDuration() {
     const hours = Math.trunc(movie.duration / 60);
     const minutes = movie.duration % 60;
@@ -14,29 +16,18 @@ function MoviesCard({ movie, saveMovie, movieIsSaved, savedSection, handleDelete
     return result;
   }
 
+  // Сохранить/удалить фильм
   function handleClickButton() {
-    if(saved) {
-      handleDelete(movie)
-      .then(() => {
-        setSaved(!saved);
-      })
-      .catch(() => {
-        console.log('Error');
-      })
+    if(savedMovie) {onDeleteMovieClick(movie)
+      .then(() => setSavedMovie(!savedMovie))
+      .catch(() => console.log('При удалении фильма произошла ошибка'))
     }
     else {
-
-      saveMovie(movie)
-      .then(() => {
-        setSaved(!saved);
-      })
-      .catch(() => {
-        console.log('Error');
-      })
+      onSaveMovieClick(movie)
+        .then(() => setSavedMovie(!savedMovie))
+        .catch(() => console.log('При сохранении фильма произошла ошибка'))
+      }  
     }
-    
-    
-  }
 
   return (
     <li className='movies-card'>
@@ -47,19 +38,18 @@ function MoviesCard({ movie, saveMovie, movieIsSaved, savedSection, handleDelete
         <h2 className='movies-card__name'>{movie.nameRU}</h2>
         <p className='movies-card__duration'>{calculateDuration()}</p>
       </div>
-      {
-      savedSection ?
-      <button
-        className='movies-card__dislike' 
-        type='button'
-        onClick={handleClickButton}>
-      </button> :
-      <button
-        className={saved ? 'movies-card__like movies-card__like_active': 'movies-card__like'} 
-        type='button'
-        onClick={handleClickButton}>
-        Сохранить
-      </button>
+      {isPageSavedMovies ?
+        <button
+          className='movies-card__dislike' 
+          type='button'
+          onClick={handleClickButton}>
+        </button> :
+        <button
+          className={savedMovie ? 'movies-card__like movies-card__like_active': 'movies-card__like'} 
+          type='button'
+          onClick={handleClickButton}>
+            Сохранить
+        </button>
       }
     </li>
   );

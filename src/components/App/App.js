@@ -1,7 +1,8 @@
+import './App.css';
+
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
-import './App.css';
 import ProtectedRoute from '../../utils/ProtectedRoute';
 import Header from "../Header/Header";
 import Main from "../Main/Main";
@@ -18,8 +19,6 @@ import Preloader from "../Preloader/Preloader";
 import { CurrentUser } from '../../contexts/CurrentUserContext';
 import { filterMovies } from '../../utils/filterMovies';
 
-
-
 function App() {
 
   const history = useHistory();
@@ -27,51 +26,54 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
-  const [movies, setMovies] = useState([]);
-  const [savedMovies, setSavedMovies] = useState([]);
-  const [preloader, setPreloader] = useState(false);
+  const [moviesList, setMoviesList] = useState([]);
+  const [savedMoviesList, setSavedMoviesList] = useState([]);
+  const [isVisiblePreloader, setIsVisiblePreloader] = useState(false);
 
+  // Проверка пользователя при запуске
   useEffect(() => {
-    setPreloader(true);
+    setIsVisiblePreloader(true);
     MainApi.getMe()
-    .then(() => setLoggedIn(true))
-    .catch(error => {
-      console.log('Вы не авторизованы');
-      setIsLoading(true);
-    })
-    .finally(() => setPreloader(false));
+      .then(() => setLoggedIn(true))
+      .catch(() => {
+        console.log('Вы не авторизованы');
+        setIsLoading(true);
+      })
+      .finally(() => setIsVisiblePreloader(false));
   }, []);
 
+  // Обновление информации о пользователе
   useEffect(() => {
     if(loggedIn)
       MainApi.getMe()
-      .then(data => {
-        setCurrentUser({ name: data.name, email: data.email });
-        MainApi.getMovies()
-        .then(savedMovies => {
-          setSavedMovies(savedMovies.reverse());
-          setIsLoading(true)
+        .then(data => {
+          setCurrentUser({ name: data.name, email: data.email });
+          MainApi.getMovies()
+            .then(savedMovies => {
+              setSavedMoviesList(savedMovies.reverse());
+              setIsLoading(true);
+            })
+            .catch(error => console.log(error));
+          const foundMoviesLocal = sessionStorage.getItem('foundMovies');
+          setMoviesList(foundMoviesLocal ? JSON.parse(foundMoviesLocal) : []);
         })
-        .catch(error => console.log(error));
-        setMovies(sessionStorage.getItem('searchResult') ? JSON.parse(sessionStorage.getItem('searchResult')) : []);
-      })
       .catch(error => console.log(error));
   }, [loggedIn]);
 
+  // Регистрация пользователя
   async function handleRegister(email, password, name) {
     let registerError;
     await MainApi.register(email, password, name)
-    .then(() => {
-      handleLogin(email, password);
-    })
-    .catch(error => registerError = error);
+      .then(() => handleLogin(email, password))
+      .catch(error => registerError = error);
     if(registerError) return Promise.reject(registerError);
   }
 
+  // Авторизация пользователя
   async function handleLogin(email, password) {
     let loginError;
     await MainApi.authorize(email, password)
-      .then(data => {
+      .then(() => {
         setLoggedIn(true);
         history.push('/movies');
       })
@@ -79,64 +81,64 @@ function App() {
     if(loginError) return Promise.reject(loginError);
   }
 
+  // Выход из аккаунта пользователя
   function handleSignout() {
     MainApi.signOut()
-      .then(data => {
-        sessionStorage.removeItem('shortFilms');
-        sessionStorage.removeItem('search');
-        sessionStorage.removeItem('searchResult')
+      .then(() => {
+        sessionStorage.removeItem('shortMoviesCheckbox');
+        sessionStorage.removeItem('enteredSearchText');
+        sessionStorage.removeItem('foundMovies')
         setLoggedIn(false);
         history.push('/');
       })
       .catch(error => console.log(error));
   }
 
+  // Изменение данных пользователя
   async function handleEditProfile(name, email) {
     let editError;
     await MainApi.updateMe({ email: email, name: name })
-      .then(data => {
-        setCurrentUser({ name: data.name, email: data.email });
-      })
+      .then(data => setCurrentUser({ name: data.name, email: data.email }))
       .catch(error => editError = error);
-      if(editError) return Promise.reject(editError);
+    if(!editError) return Promise.resolve();
+    else return Promise.reject(editError);
   }
 
-  async function searchMovies(search, shortFilms, savedSection) {
+  // Поиск и фильтрация фильмов
+  async function handleSearchMovies(enteredSearchText, shortMoviesCheckbox, isPageSavedMovies) {
     let searchError;
-    if(savedSection) {
-      setSavedMovies([]);
+    if(isPageSavedMovies) {
+      setSavedMoviesList([]);
       await MainApi.getMovies()
-      .then(savedMovies => {
-        const searchResult = filterMovies(savedMovies, search, shortFilms);
-        setSavedMovies(searchResult.reverse());
-      })
-      .catch(error => searchError = error);
-    }
+        .then(savedMovies => {
+          const searchResult = filterMovies(savedMovies, enteredSearchText, shortMoviesCheckbox);
+          setSavedMoviesList(searchResult.reverse());
+        })
+        .catch(error => searchError = error);
+      }
     else {
-    setMovies([]);
-    setPreloader(true);
-    await MoviesApi.getMovies()
-      .then(movies => {
-        const searchResult = filterMovies(movies, search, shortFilms);
-        setMovies(searchResult);
-        sessionStorage.setItem('shortFilms', shortFilms);
-        sessionStorage.setItem('search', search);
-        sessionStorage.setItem('searchResult', JSON.stringify(searchResult));
-      })
-      .catch(error => {
-        searchError = error;
-      })
-      .finally(() => {
-        setPreloader(false);
-      });
-    }
+      setMoviesList([]);
+      setIsVisiblePreloader(true);
+      await MoviesApi.getMovies()
+        .then(movies => {
+          const searchResult = filterMovies(movies, enteredSearchText, shortMoviesCheckbox);
+          setMoviesList(searchResult);
+          sessionStorage.setItem('shortMoviesCheckbox', shortMoviesCheckbox);
+          sessionStorage.setItem('enteredSearchText', enteredSearchText);
+          sessionStorage.setItem('foundMovies', JSON.stringify(searchResult));
+        })
+        .catch(error => searchError = error)
+        .finally(() => setIsVisiblePreloader(false));
+      }
     if(!searchError) return Promise.resolve();
-    else return Promise.reject()
+    else return Promise.reject();
   }
 
-  async function saveMovie(movie) {
+  // Сохранить фильм
+  async function handleSaveMovie(movie) {
     let saveError;
-    await MainApi.addMovie({ country: movie.country || 'не указано',
+    await MainApi.addMovie({ 
+      country: movie.country || 'не указано',
       director: movie.director || 'не указано',
       duration: movie.duration || 'не указано',
       year: movie.year || 'не указано',
@@ -146,86 +148,96 @@ function App() {
       thumbnail: `https://api.nomoreparties.co${movie.image.url}` || 'не указано',
       movieId: movie.id || 'не указано',
       nameRU: movie.nameRU || 'не указано',
-      nameEN: movie.nameEN || 'не указано' })
+      nameEN: movie.nameEN || 'не указано'
+    })
       .then(newMovie => {
-        setSavedMovies([newMovie, ...savedMovies])
+        setSavedMoviesList([newMovie, ...savedMoviesList])
       })
       .catch(error => saveError = error);
     if(!saveError) return Promise.resolve();
     else return Promise.reject()
   }
 
-  async function deleteMovie(movie) {
+  // Удалить фильм
+  async function handleDeleteMovie(movie) {
     let deleteError;
-    const deleteMovieID = movie._id || savedMovies.find((savedMovie) => savedMovie.movieId === movie.id)._id;
+    const deleteMovieID = movie._id || savedMoviesList.find((savedMovie) => savedMovie.movieId === movie.id)._id;
     await MainApi.deleteMovie(deleteMovieID)
-      .then(() => {
-        setSavedMovies((movies) => movies.filter((movie) => movie._id !== deleteMovieID));
-      })
+      .then(() => setSavedMoviesList((movies) => movies.filter((movie) => movie._id !== deleteMovieID)))
       .catch(error => deleteError = error);
     if(!deleteError) return Promise.resolve();
-    else return Promise.reject()
+    else return Promise.reject();
   }
 
-function handleGoBack() {
-  history.goBack();
-}
+  // Вернуться назад
+  function handleGoBack() { history.goBack() }
 
   return (
     <div className={!isLoading ? 'app app_loading' : 'app'}>
-      {(preloader && !loggedIn) && <Preloader />}
-       {isLoading &&
-      <div className="app__container">
-
-      <CurrentUser.Provider value={currentUser}>
+      {(isVisiblePreloader && !loggedIn) && <Preloader />}
+      {isLoading && <div className="app__container">
+        <CurrentUser.Provider value={currentUser}>
           <Switch>
+
             <Route exact path='/'>
               <Header loggedIn={loggedIn} />
               <Main />
               <Footer />
             </Route>
-            <Route path='/signin'>
-            <ProtectedRoute loggedIn={loggedIn}>
-              <Login onClickLogin={handleLogin} />
-              </ProtectedRoute>
-            </Route>
-            
-            <Route path='/signup'>
-            <ProtectedRoute loggedIn={loggedIn}>
-              <Register onClickRegister={handleRegister} />
-              </ProtectedRoute>
-            </Route>  
-            <Route path='/movies'>
 
-              <Header loggedIn={loggedIn} />
+            <Route path='/signin'>
               <ProtectedRoute loggedIn={loggedIn}>
-              <Movies movies={movies} handleDelete={deleteMovie} savedMovies={savedMovies} setMovies={setMovies} searchMovies={searchMovies} preloader={preloader} saveMovie={saveMovie}/>
-                </ProtectedRoute> 
-              <Footer />
-            
-            </Route>
-            <Route path='/saved-movies'>
-            <ProtectedRoute loggedIn={loggedIn}>
-              <Header loggedIn={loggedIn} />
-              <SavedMovies savedMovies={savedMovies} handleDelete={deleteMovie} searchMovies={searchMovies}/>
+                <Login onClickLogin={handleLogin} />
               </ProtectedRoute>
-              <Footer />
-              
             </Route>
+
+            <Route path='/signup'>
+              <ProtectedRoute loggedIn={loggedIn}>
+                <Register onClickRegister={handleRegister} />
+              </ProtectedRoute>
+            </Route>
+             
+            <Route path='/movies'>
+              <ProtectedRoute loggedIn={loggedIn}>
+                <Header loggedIn={loggedIn} />
+                <Movies 
+                  moviesList={moviesList}
+                  savedMoviesList={savedMoviesList}
+                  isVisiblePreloader={isVisiblePreloader}
+                  onSearchClick={handleSearchMovies}
+                  onDeleteMovieClick={handleDeleteMovie} 
+                  onSaveMovieClick={handleSaveMovie}/>
+                <Footer />
+              </ProtectedRoute>
+            </Route>
+
+            <Route path='/saved-movies'>
+              <ProtectedRoute loggedIn={loggedIn}>
+                <Header loggedIn={loggedIn} />
+                <SavedMovies
+                  savedMoviesList={savedMoviesList}
+                  onDeleteMovieClick={handleDeleteMovie}
+                  onSearchClick={handleSearchMovies}/>
+                <Footer />
+              </ProtectedRoute>
+            </Route>
+
             <Route path='/profile'>
             <ProtectedRoute loggedIn={loggedIn}>
               <Header loggedIn={loggedIn} />
-              <Profile onClickSignout={handleSignout} onClickEditProfile={handleEditProfile}/>
+              <Profile
+                onClickSignout={handleSignout}
+                onClickEditProfile={handleEditProfile}/>
               </ProtectedRoute>
             </Route>
+
             <Route path='*'>
-              <NotFoundPage handleGoBack={handleGoBack}/>
+              <NotFoundPage onClickBack={handleGoBack}/>
             </Route>
+            
           </Switch>
         </CurrentUser.Provider>
-
-      </div>
-            }
+      </div>}
     </div>
   );
 }

@@ -1,19 +1,17 @@
 import './HeaderNav.css';
 
 import { NavLink } from 'react-router-dom';
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 
 function HeaderNav() {
 
-  const [menu, setMenu] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const handleMenuClick = () => {
-    setMenu(!menu);
-  };
+  // Открыть/закрыть меню-бургер
+  function handleMenuClick() { setIsMenuOpen(!isMenuOpen) }
   
-
   return (
-    <div className={ menu ? 'header-nav header-nav_opened' : 'header-nav'}>
+    <div className={ isMenuOpen ? 'header-nav header-nav_opened' : 'header-nav'}>
       <div className='header-nav__overlay'></div>
       <div className='header-nav__menu' onClick={handleMenuClick}>
         <div className='header-nav__menu-first-line'></div>
