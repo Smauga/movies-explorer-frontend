@@ -1,4 +1,4 @@
-const serverAddress = 'http://localhost:5000';
+const serverAddress = 'https://api.movies-explorer.smaug.nomoredomains.xyz';
 
 class MainApi {
   constructor({ address }) {
