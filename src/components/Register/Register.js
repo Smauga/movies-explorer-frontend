@@ -10,6 +10,7 @@ import SignBottom from "../SignBottom/SignBottom";
 function Register({ onClickRegister }) {
 
   const [errorMessage, setErrorMessage] = useState('');
+  const [buttonsIsBlocked, setButtonsIsBlocked] = useState(false);
   const useForm = useFormWithValidation();
 
   // Изменение инпутов
@@ -18,15 +19,15 @@ function Register({ onClickRegister }) {
    // Отправка инпутов
   function handleSubmit(e) {
     e.preventDefault();
+    setButtonsIsBlocked(true);
     setErrorMessage('');
     onClickRegister(useForm.values.email, useForm.values.password, useForm.values.name)
-      .catch((error) => 
+      .catch((error) => {
+        setButtonsIsBlocked(false);
         error ===  409? 
         setErrorMessage('Пользователь с таким email уже существует.') : 
-        setErrorMessage('При регистрации пользователя произошла ошибка.')
+        setErrorMessage('При регистрации пользователя произошла ошибка.')}
       );
-    e.target.reset();
-    useForm.resetForm();
   }
 
   return (
@@ -57,6 +58,7 @@ function Register({ onClickRegister }) {
           onChange={handleChange}/>
       </div>
       <SignBottom
+        buttonsIsBlocked={buttonsIsBlocked}
         errorMessage={errorMessage}
         buttonText='Зарегистрироваться'
         isValid={useForm.isValid}

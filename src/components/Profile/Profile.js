@@ -8,6 +8,7 @@ function Profile({ onClickSignout, onClickEditProfile }) {
   const user = useContext(CurrentUser);
 
   const [isEditProfile, setIsEditProfile] = useState(false);
+  const [buttonIsBlocked, setButtonIsBlocked] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [isValid, setIsValid] = useState(false);
@@ -33,6 +34,7 @@ function Profile({ onClickSignout, onClickEditProfile }) {
   
   function handleSubmit(e) {
     e.preventDefault();
+    setButtonIsBlocked(true);
     onClickEditProfile(name, email)
       .then(() => {
         setIsEditProfile(false)
@@ -43,7 +45,8 @@ function Profile({ onClickSignout, onClickEditProfile }) {
         error ===  409 ? 
         setMessage({ error: true, text: 'Пользователь с таким email уже существует'}) : 
         setMessage({ error: true, text:'При обновлении профиля произошла ошибка'});
-      });
+      })
+      .finally(() => setButtonIsBlocked(false));
   }
 
   return (
@@ -80,10 +83,11 @@ function Profile({ onClickSignout, onClickEditProfile }) {
         <p className={message.error ? 'profile__message profile__message_type_error' : 'profile__message'}>{message.text}</p>
         { isEditProfile ?
           <button
-            className={!isValid || (name === user.name && email === user.email) ?
+            className={!isValid || (name === user.name && email === user.email) || buttonIsBlocked ?
               'profile__button-edit profile__button-edit_disabled':
               'profile__button-edit'}
-            type='submit'>
+            type='submit'
+            disabled={!isValid || (name === user.name && email === user.email) || buttonIsBlocked}>
               Сохранить
             </button> :
           <>

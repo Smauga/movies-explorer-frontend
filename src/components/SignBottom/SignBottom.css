@@ -56,6 +56,11 @@
   transition: .3s;
 }
 
+.sign-bottom__link_disabled {
+  color: #F8F8F8;
+  pointer-events: none;
+}
+
 .sign-bottom__link:hover {
   opacity: .7;
 }

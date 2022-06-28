@@ -10,6 +10,7 @@ import SignBottom from "../SignBottom/SignBottom";
 function Login({ onClickLogin }) {
 
   const [errorMessage, setErrorMessage] = useState('');
+  const [buttonsIsBlocked, setButtonsIsBlocked] = useState(false);
   const useForm = useFormWithValidation();
 
   // Изменение инпутов
@@ -17,15 +18,15 @@ function Login({ onClickLogin }) {
   
   // Отправка инпутов
   function handleSubmit(e) {
+    setButtonsIsBlocked(true);
     e.preventDefault();
     onClickLogin(useForm.values.email, useForm.values.password)
-      .catch((error) => 
+      .catch((error) => {
+        setButtonsIsBlocked(false);
         error ===  400 ? 
         setErrorMessage('Вы ввели неправильный логин или пароль') : 
         setErrorMessage('При авторизации произошла ошибка')
-      );
-    e.target.reset();
-    useForm.resetForm();
+  });
   }
 
   return (
@@ -47,6 +48,7 @@ function Login({ onClickLogin }) {
           isValid={useForm.errors.password}/>
       </div>
       <SignBottom 
+        buttonsIsBlocked={buttonsIsBlocked}
         errorMessage={errorMessage}
         buttonText='Войти'
         isValid={useForm.isValid}

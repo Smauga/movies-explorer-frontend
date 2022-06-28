@@ -125,7 +125,6 @@
 .profile__button-edit_disabled {
   background-color: #F8F8F8;
   color: #C2C2C2;
-  pointer-events: none;
 }
 
 .profile__message {
