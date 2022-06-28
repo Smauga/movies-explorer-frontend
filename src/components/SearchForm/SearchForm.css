@@ -60,6 +60,7 @@
   background-position: center;
   box-sizing: border-box;
   transition: .3s;
+  cursor: not-allowed;
 }
 
 .search-form__search-button_enabled {

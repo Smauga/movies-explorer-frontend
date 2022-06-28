@@ -9,7 +9,7 @@ import MoreMoviesButton from "../MoreMoviesButton/MoreMoviesButton";
 import Preloader from "../Preloader/Preloader";
 
 function Movies({ 
-  moviesList,
+  filtredMoviesList,
   onDeleteMovieClick,
   savedMoviesList,
   onSearchClick,
@@ -64,10 +64,10 @@ function Movies({
         savedEnteredSearchText={sessionStorage.getItem('enteredSearchText')}
         isPageSavedMovies={false}/>
       {isVisiblePreloader && <Preloader />}
-      {moviesList.length === 0 && !isVisiblePreloader ?
+      {filtredMoviesList.length === 0 && !isVisiblePreloader ?
         <p className='movies__not-found'>{searchMessage}</p> :
         <MoviesCardList>
-          {moviesList.slice(0, renderedMovies.initial + countMoreMovies * renderedMovies.step).map((movie) => {
+          {filtredMoviesList.slice(0, renderedMovies.initial + countMoreMovies * renderedMovies.step).map((movie) => {
             const isSavedMovie = savedMoviesIdList.includes(movie.id);
             return <MoviesCard
               movie={movie}
@@ -78,7 +78,7 @@ function Movies({
             )
           }
       </MoviesCardList>}
-      {renderedMovies.initial + countMoreMovies * renderedMovies.step < moviesList.length && 
+      {renderedMovies.initial + countMoreMovies * renderedMovies.step < filtredMoviesList.length && 
       <MoreMoviesButton renderMoreMovies={renderMoreMovies}/>}
     </section>
   );

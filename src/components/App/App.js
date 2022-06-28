@@ -27,7 +27,9 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
   const [moviesList, setMoviesList] = useState([]);
+  const [filtredMoviesList, setFiltredMoviesList] = useState([]);
   const [savedMoviesList, setSavedMoviesList] = useState([]);
+  const [filtredSavedMoviesList, setFiltredSavedMoviesList] = useState([]);
   const [isVisiblePreloader, setIsVisiblePreloader] = useState(false);
 
   // Проверка пользователя при запуске
@@ -50,12 +52,13 @@ function App() {
           setCurrentUser({ name: data.name, email: data.email });
           MainApi.getMovies()
             .then(savedMovies => {
-              setSavedMoviesList(savedMovies.reverse());
+              setFiltredSavedMoviesList(savedMovies.reverse());
+              setSavedMoviesList(savedMovies);
               setIsLoading(true);
             })
             .catch(error => console.log(error));
           const foundMoviesLocal = sessionStorage.getItem('foundMovies');
-          setMoviesList(foundMoviesLocal ? JSON.parse(foundMoviesLocal) : []);
+          setFiltredMoviesList(foundMoviesLocal ? JSON.parse(foundMoviesLocal) : []);
         })
       .catch(error => console.log(error));
   }, [loggedIn]);
@@ -107,29 +110,28 @@ function App() {
   // Поиск и фильтрация фильмов
   async function handleSearchMovies(enteredSearchText, shortMoviesCheckbox, isPageSavedMovies) {
     let searchError;
+    let moviesListfromServer;
     if(isPageSavedMovies) {
-      setSavedMoviesList([]);
-      await MainApi.getMovies()
-        .then(savedMovies => {
-          const searchResult = filterMovies(savedMovies, enteredSearchText, shortMoviesCheckbox);
-          setSavedMoviesList(searchResult.reverse());
-        })
-        .catch(error => searchError = error);
-      }
+      setFiltredSavedMoviesList(filterMovies(savedMoviesList, enteredSearchText, shortMoviesCheckbox));
+    }
     else {
-      setMoviesList([]);
-      setIsVisiblePreloader(true);
-      await MoviesApi.getMovies()
+      if(moviesList.length === 0) {
+        setFiltredMoviesList([]);
+        setIsVisiblePreloader(true);
+        await MoviesApi.getMovies()
         .then(movies => {
-          const searchResult = filterMovies(movies, enteredSearchText, shortMoviesCheckbox);
-          setMoviesList(searchResult);
-          sessionStorage.setItem('shortMoviesCheckbox', shortMoviesCheckbox);
-          sessionStorage.setItem('enteredSearchText', enteredSearchText);
-          sessionStorage.setItem('foundMovies', JSON.stringify(searchResult));
+          moviesListfromServer = movies;
+          setMoviesList(moviesListfromServer);
         })
         .catch(error => searchError = error)
         .finally(() => setIsVisiblePreloader(false));
       }
+      const searchResult = filterMovies(moviesListfromServer || moviesList, enteredSearchText, shortMoviesCheckbox);
+      setFiltredMoviesList(searchResult);
+      sessionStorage.setItem('shortMoviesCheckbox', shortMoviesCheckbox);
+      sessionStorage.setItem('enteredSearchText', enteredSearchText);
+      sessionStorage.setItem('foundMovies', JSON.stringify(searchResult));
+    }
     if(!searchError) return Promise.resolve();
     else return Promise.reject();
   }
@@ -151,7 +153,8 @@ function App() {
       nameEN: movie.nameEN || 'не указано'
     })
       .then(newMovie => {
-        setSavedMoviesList([newMovie, ...savedMoviesList])
+        setSavedMoviesList([newMovie, ...savedMoviesList]);
+        setFiltredSavedMoviesList([newMovie, ...filtredSavedMoviesList]);
       })
       .catch(error => saveError = error);
     if(!saveError) return Promise.resolve();
@@ -163,7 +166,10 @@ function App() {
     let deleteError;
     const deleteMovieID = movie._id || savedMoviesList.find((savedMovie) => savedMovie.movieId === movie.id)._id;
     await MainApi.deleteMovie(deleteMovieID)
-      .then(() => setSavedMoviesList((movies) => movies.filter((movie) => movie._id !== deleteMovieID)))
+      .then(() => {
+        setSavedMoviesList((movies) => movies.filter((movie) => movie._id !== deleteMovieID));
+        setFiltredSavedMoviesList((movies) => movies.filter((movie) => movie._id !== deleteMovieID))
+      })
       .catch(error => deleteError = error);
     if(!deleteError) return Promise.resolve();
     else return Promise.reject();
@@ -201,7 +207,7 @@ function App() {
               <ProtectedRoute loggedIn={loggedIn}>
                 <Header loggedIn={loggedIn} />
                 <Movies 
-                  moviesList={moviesList}
+                  filtredMoviesList={filtredMoviesList}
                   savedMoviesList={savedMoviesList}
                   isVisiblePreloader={isVisiblePreloader}
                   onSearchClick={handleSearchMovies}
@@ -216,6 +222,7 @@ function App() {
                 <Header loggedIn={loggedIn} />
                 <SavedMovies
                   savedMoviesList={savedMoviesList}
+                  filtredSavedMoviesList={filtredSavedMoviesList}
                   onDeleteMovieClick={handleDeleteMovie}
                   onSearchClick={handleSearchMovies}/>
                 <Footer />
