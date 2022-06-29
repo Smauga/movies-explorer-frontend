@@ -17,7 +17,8 @@ import MainApi from "../../utils/MainApi";
 import MoviesApi from "../../utils/MoviesApi";
 import Preloader from "../Preloader/Preloader";
 import { CurrentUser } from '../../contexts/CurrentUserContext';
-import { filterMovies } from '../../utils/filterMovies';
+import filterMovies from '../../utils/filterMovies';
+import { notAuthorizedMessage, notEnteredField } from '../../utils/constants';
 
 function App() {
 
@@ -38,7 +39,7 @@ function App() {
     MainApi.getMe()
       .then(() => setLoggedIn(true))
       .catch(() => {
-        console.log('Вы не авторизованы');
+        console.log(notAuthorizedMessage);
         setIsLoading(true);
       })
       .finally(() => setIsVisiblePreloader(false));
@@ -140,17 +141,17 @@ function App() {
   async function handleSaveMovie(movie) {
     let saveError;
     await MainApi.addMovie({ 
-      country: movie.country || 'не указано',
-      director: movie.director || 'не указано',
-      duration: movie.duration || 'не указано',
-      year: movie.year || 'не указано',
-      description: movie.description || 'не указано',
-      image: `https://api.nomoreparties.co${movie.image.url}` || 'не указано',
-      trailerLink: movie.trailerLink || 'не указано',
-      thumbnail: `https://api.nomoreparties.co${movie.image.url}` || 'не указано',
-      movieId: movie.id || 'не указано',
-      nameRU: movie.nameRU || 'не указано',
-      nameEN: movie.nameEN || 'не указано'
+      country: movie.country || notEnteredField,
+      director: movie.director || notEnteredField,
+      duration: movie.duration || notEnteredField,
+      year: movie.year || notEnteredField,
+      description: movie.description || notEnteredField,
+      image: `https://api.nomoreparties.co${movie.image.url}` || notEnteredField,
+      trailerLink: movie.trailerLink || notEnteredField,
+      thumbnail: `https://api.nomoreparties.co${movie.image.url}` || notEnteredField,
+      movieId: movie.id || notEnteredField,
+      nameRU: movie.nameRU || notEnteredField,
+      nameEN: movie.nameEN || notEnteredField
     })
       .then(newMovie => {
         setSavedMoviesList([newMovie, ...savedMoviesList]);

@@ -1,4 +1,4 @@
-const serverAddress = 'https://api.nomoreparties.co';
+import { moviesServerAddress } from './constants';
 
 class MoviesApi {
   constructor({ address }) {
@@ -10,7 +10,7 @@ class MoviesApi {
     return Promise.reject(res.status);
   }
 
-  // Получения фильмов
+  // Получение фильмов
   getMovies() {
     return fetch(`${this._address}/beatfilm-movies`)
       .then(res => this._handleResponse(res));
@@ -19,4 +19,4 @@ class MoviesApi {
 
 
 
-export default new MoviesApi({ address: serverAddress });
+export default new MoviesApi({ address: moviesServerAddress });

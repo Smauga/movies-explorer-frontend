@@ -6,6 +6,7 @@ import { useState } from 'react';
 import SignInput from "../SignInput/SignInput";
 import SignTitle from "../SignTitle/SignTitle";
 import SignBottom from "../SignBottom/SignBottom";
+import { registerConflictErrorMessage, registerServerErrorMessage } from '../../utils/constants';
 
 function Register({ onClickRegister }) {
 
@@ -25,8 +26,8 @@ function Register({ onClickRegister }) {
       .catch((error) => {
         setButtonsIsBlocked(false);
         error ===  409? 
-        setErrorMessage('Пользователь с таким email уже существует.') : 
-        setErrorMessage('При регистрации пользователя произошла ошибка.')}
+        setErrorMessage(registerConflictErrorMessage) : 
+        setErrorMessage(registerServerErrorMessage)}
       );
   }
 

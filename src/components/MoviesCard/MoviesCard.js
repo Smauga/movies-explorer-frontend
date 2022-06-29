@@ -2,9 +2,11 @@ import './MoviesCard.css';
 
 import { useState } from 'react';
 
+import { moviesServerAddress, deleteMovieErrorMessage, saveMovieErrorMessage } from '../../utils/constants';
+
 function MoviesCard({ movie, onSaveMovieClick, movieIsSaved, isPageSavedMovies, onDeleteMovieClick }) {
 
-  const movieImage = movie.image.url ? `https://api.nomoreparties.co${movie.image.url}` : movie.image;
+  const movieImage = movie.image.url ? `${moviesServerAddress}${movie.image.url}` : movie.image;
   const [savedMovie, setSavedMovie] = useState(movieIsSaved);
 
   // Перевод длительности фильма в формат часы/минуты
@@ -20,12 +22,12 @@ function MoviesCard({ movie, onSaveMovieClick, movieIsSaved, isPageSavedMovies, 
   function handleClickButton() {
     if(savedMovie) {onDeleteMovieClick(movie)
       .then(() => setSavedMovie(!savedMovie))
-      .catch(() => console.log('При удалении фильма произошла ошибка'))
+      .catch(() => console.log(deleteMovieErrorMessage))
     }
     else {
       onSaveMovieClick(movie)
         .then(() => setSavedMovie(!savedMovie))
-        .catch(() => console.log('При сохранении фильма произошла ошибка'))
+        .catch(() => console.log(saveMovieErrorMessage))
       }  
     }
 

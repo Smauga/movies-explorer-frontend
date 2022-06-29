@@ -2,6 +2,7 @@ import './Profile.css';
 
 import { useState, useEffect, useContext } from 'react';
 import { CurrentUser } from '../../contexts/CurrentUserContext';
+import { profileUpdateSussessMesssage, profileUpdateConflictMesssage, profileUpdateServerMesssage } from '../../utils/constants';
 
 function Profile({ onClickSignout, onClickEditProfile }) {
   
@@ -39,12 +40,12 @@ function Profile({ onClickSignout, onClickEditProfile }) {
       .then(() => {
         setIsEditProfile(false)
         setMessage('');
-        setMessage({ error: false, text:'Профиль успешно обновлен'});
+        setMessage({ error: false, text: profileUpdateSussessMesssage});
       })
       .catch((error) => {
         error ===  409 ? 
-        setMessage({ error: true, text: 'Пользователь с таким email уже существует'}) : 
-        setMessage({ error: true, text:'При обновлении профиля произошла ошибка'});
+        setMessage({ error: true, text: profileUpdateConflictMesssage}) : 
+        setMessage({ error: true, text: profileUpdateServerMesssage});
       })
       .finally(() => setButtonIsBlocked(false));
   }

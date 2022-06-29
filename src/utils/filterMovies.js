@@ -1,11 +1,13 @@
-export function filterMovies(moviesList, inputText, shortCheckbox) {
+import { shortMoviesDuration } from './constants';
+
+export default function filterMovies(moviesList, inputText, shortCheckbox) {
   return moviesList.filter((movie) => {
     const movieNameRu = movie.nameRU && movie.nameRU.toLowerCase();
     const movieNameEn = movie.nameEN && movie.nameEN.toLowerCase();
     const inputTextLow = inputText.toLowerCase();
     const textResult = checkIncludes(movieNameRu, inputTextLow) || checkIncludes(movieNameEn, inputTextLow);
     const movieDuration = movie.duration;
-    if(shortCheckbox) return textResult && movieDuration <= 40;
+    if(shortCheckbox) return textResult && movieDuration <= shortMoviesDuration;
     else return textResult;
   });
 }

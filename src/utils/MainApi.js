@@ -1,5 +1,4 @@
-// const serverAddress = 'https://api.movies-explorer.smaug.nomoredomains.xyz';
-const serverAddress = 'http://localhost:5000';
+import { mainServerAddress } from './constants';
 
 class MainApi {
   constructor({ address }) {
@@ -123,4 +122,4 @@ class MainApi {
   }
 }
 
-export default new MainApi({ address: serverAddress });
+export default new MainApi({ address: mainServerAddress });

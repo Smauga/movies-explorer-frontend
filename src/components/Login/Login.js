@@ -6,6 +6,7 @@ import { useState } from 'react';
 import SignInput from "../SignInput/SignInput";
 import SignTitle from "../SignTitle/SignTitle";
 import SignBottom from "../SignBottom/SignBottom";
+import { loginBadRequestErrorMessage, loginServerErrorMessage } from '../../utils/constants';
 
 function Login({ onClickLogin }) {
 
@@ -23,9 +24,9 @@ function Login({ onClickLogin }) {
     onClickLogin(useForm.values.email, useForm.values.password)
       .catch((error) => {
         setButtonsIsBlocked(false);
-        error ===  400 ? 
-        setErrorMessage('Вы ввели неправильный логин или пароль') : 
-        setErrorMessage('При авторизации произошла ошибка')
+        error ===  400 || error ===  401 ? 
+        setErrorMessage(loginBadRequestErrorMessage) : 
+        setErrorMessage(loginServerErrorMessage)
   });
   }
 
