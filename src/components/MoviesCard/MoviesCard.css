@@ -1,4 +1,5 @@
 .movies-card {
+  overflow: hidden;
   width: 100%;
   position: relative;
   padding-top: 55.8%;
@@ -10,7 +11,10 @@
   left: 0;
   border-radius: 6px;
   width: 100%;
+  height: calc(100% - 46px);
   object-fit: cover;
+  cursor: pointer;
+  background-position: center;
   z-index: 10;
 }
 
@@ -126,6 +130,13 @@
   .movies-card__info {
     width: 100%;
     margin-top: 25px;
+  }
+
+  .movies-card__name {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    /* height: 16px; */
   }
 }
 

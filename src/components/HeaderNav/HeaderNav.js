@@ -1,15 +1,17 @@
-import { NavLink } from 'react-router-dom';
-
 import './HeaderNav.css';
 
-const handleMenuClick = () => {
-  const menu = document.querySelector('.header-nav');  
-  menu.classList.toggle('header-nav_opened');
-};
+import { NavLink } from 'react-router-dom';
+import { useState } from 'react';
 
 function HeaderNav() {
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  // Открыть/закрыть меню-бургер
+  function handleMenuClick() { setIsMenuOpen(!isMenuOpen) }
+  
   return (
-    <div className='header-nav'>
+    <div className={ isMenuOpen ? 'header-nav header-nav_opened' : 'header-nav'}>
       <div className='header-nav__overlay'></div>
       <div className='header-nav__menu' onClick={handleMenuClick}>
         <div className='header-nav__menu-first-line'></div>
@@ -21,26 +23,30 @@ function HeaderNav() {
           <NavLink
             exact to='/'
             activeClassName='header-nav__link_active'
-            className='header-nav__link header-nav__link_tablet-only'>
+            className='header-nav__link header-nav__link_tablet-only'
+            onClick={handleMenuClick}>
             Главная
           </NavLink>
           <NavLink
             to='/movies'
             activeClassName='header-nav__link_active'
-            className='header-nav__link'>
+            className='header-nav__link'
+            onClick={handleMenuClick}>
             Фильмы
           </NavLink>
           <NavLink
             to='/saved-movies'
             activeClassName='header-nav__link_active'
-            className='header-nav__link'>
+            className='header-nav__link'
+            onClick={handleMenuClick}>
             Сохранённые фильмы
           </NavLink>
         </div>
         <NavLink 
           to='profile'
           className='header-nav__account-button'
-          activeClassName='header-nav__account-button_active'>
+          activeClassName='header-nav__account-button_active'
+          onClick={handleMenuClick}>
           Аккаунт
         </NavLink>
       </nav>

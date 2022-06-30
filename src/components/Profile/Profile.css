@@ -9,6 +9,11 @@
 
 .profile__container {
   width: 100%;
+  pointer-events: none;
+}
+
+.profile__container_enabled {
+  pointer-events: all;
 }
 
 .profile__welcome {
@@ -21,10 +26,16 @@
 }
 
 .profile__input-container {
+  box-sizing: border-box;
   display: flex;
   width: 100%;
   border-bottom: solid 1px #424242;
-  pointer-events: none;
+  transition: .3s;
+}
+
+.profile__input-container:hover
+ {
+  padding: 0 0 0 5px;
 }
 
 .profile__input-container:last-child {
@@ -52,6 +63,16 @@
   text-align: right;
   color: #FFFFFF;
   outline: none;
+  transition: .3s;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+
+.profile__input:focus
+ {
+  padding: 0 5px 0 0 ;
+ 
 }
 
 .profile__buttons {
@@ -94,6 +115,7 @@
   text-align: center;
   color: #FFFFFF;
   transition: .3s;
+  cursor: pointer;
 }
 
 .profile__button-edit:hover {
@@ -103,16 +125,19 @@
 .profile__button-edit_disabled {
   background-color: #F8F8F8;
   color: #C2C2C2;
+  pointer-events: none;
 }
 
-.profile__button-edit_disabled:hover {
-  opacity: 1;
-}
-
-.profile__error-message {
-  font-size: 11px;
-  line-height: 13px;
+.profile__message {
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 16px;
   text-align: center;
+  color: #3DDC84;
+  margin: 0;
+}
+
+.profile__message_type_error {
   color: #FF004C;
 }
 
